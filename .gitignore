@@ -16,6 +16,9 @@ dist-ssr
 .env
 .env.local
 
+# PDF reference files (keep local only)
+*.pdf
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
