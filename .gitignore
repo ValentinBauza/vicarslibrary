@@ -19,6 +19,9 @@ dist-ssr
 # PDF reference files (keep local only)
 *.pdf
 
+# Claude Code settings
+.claude/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
