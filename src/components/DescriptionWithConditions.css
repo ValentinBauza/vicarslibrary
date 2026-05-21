@@ -1,0 +1,14 @@
+.condition-link {
+  color: #4a9eff;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.condition-link:hover {
+  color: #7b61ff;
+  text-decoration-style: solid;
+}

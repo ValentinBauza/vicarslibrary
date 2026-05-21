@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Card.css';
+import { DescriptionWithConditions } from './DescriptionWithConditions';
 
 interface CardProps {
   title: string;
@@ -84,7 +85,7 @@ export const Card: React.FC<CardProps> = ({
         )}
 
         <div className="card-description">
-          {description}
+          <DescriptionWithConditions text={description} />
         </div>
 
         {enhancements && enhancements.length > 0 && (
@@ -92,7 +93,9 @@ export const Card: React.FC<CardProps> = ({
             <h3>Enhancements</h3>
             <ul>
               {enhancements.map((enhancement, index) => (
-                <li key={index}>{enhancement}</li>
+                <li key={index}>
+                  <DescriptionWithConditions text={enhancement} />
+                </li>
               ))}
             </ul>
           </div>
