@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(awk '/school: \"Invocation\"/{getline; print}' src/data/spells.ts)",
+      "Bash(node *)",
+      "Bash(curl -s http://localhost:5177/)",
+      "Bash(npx tsc *)",
+      "Bash(grep -v \"Use \\\\`node\")",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
+    ]
+  }
+}

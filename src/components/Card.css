@@ -1,0 +1,136 @@
+.card {
+  background: #1e1e1e;
+  border: 2px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: #4a9eff;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #3a3a3a;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.card-header-content {
+  flex: 1;
+}
+
+.card-title {
+  margin: 0;
+  color: #4a9eff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-subtitle {
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.card-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+.card-meta-item {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.card-meta-item strong {
+  color: #fff;
+  margin-right: 0.5rem;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  background: #3a3a3a;
+  color: #4a9eff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  border: 1px solid #4a4a4a;
+}
+
+.card-description {
+  color: #ddd;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  white-space: pre-line;
+}
+
+.card-enhancements {
+  background: #2a2a2a;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid #4a9eff;
+}
+
+.card-enhancements h3 {
+  margin: 0 0 0.75rem 0;
+  color: #4a9eff;
+  font-size: 1.1rem;
+}
+
+.card-enhancements ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #ccc;
+}
+
+.card-enhancements li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.card-enhancements li:last-child {
+  margin-bottom: 0;
+}
+
+.save-button {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+  margin-left: 1rem;
+}
+
+.save-button:hover {
+  color: #ffcc00;
+  transform: scale(1.1);
+}
+
+.save-button.saved {
+  color: #ffcc00;
+}
+
+.save-button.saved:hover {
+  color: #666;
+}
