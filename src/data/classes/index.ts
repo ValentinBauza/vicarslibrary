@@ -10,8 +10,9 @@ import { rogue } from './rogue';
 import { sorcerer } from './sorcerer';
 import { spellblade } from './spellblade';
 import { warlock } from './warlock';
+import { wizard } from './wizard';
 
-export { barbarian, bard, champion, cleric, commander, druid, hunter, monk, rogue, sorcerer, spellblade, warlock };
+export { barbarian, bard, champion, cleric, commander, druid, hunter, monk, rogue, sorcerer, spellblade, warlock, wizard };
 export type { CharacterClass, ClassFeature } from './types';
 
 export const classes = {
@@ -26,7 +27,8 @@ export const classes = {
   rogue: rogue,
   sorcerer: sorcerer,
   spellblade: spellblade,
-  warlock: warlock
+  warlock: warlock,
+  wizard: wizard
 };
 
 export const classNames = Object.keys(classes);
