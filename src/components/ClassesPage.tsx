@@ -1,0 +1,71 @@
+import React, { useState } from 'react';
+import { classes, classNames } from '../data/classes';
+import type { CharacterClass, ClassFeature } from '../data/classes';
+import { Card } from './Card';
+
+export const ClassesPage: React.FC = () => {
+  const [selectedClass, setSelectedClass] = useState<string>('cleric');
+
+  const currentClass: CharacterClass = classes[selectedClass as keyof typeof classes];
+
+  return (
+    <div className="app">
+      <header className="app-header">
+        <h1>DC20 Classes</h1>
+        <p className="subtitle">Reference for character classes and their features</p>
+      </header>
+
+      <div className="filters">
+        <div className="filter-group">
+          <label htmlFor="class-select">Class:</label>
+          <select
+            id="class-select"
+            value={selectedClass}
+            onChange={(e) => setSelectedClass(e.target.value)}
+          >
+            {classNames.map((className) => (
+              <option key={className} value={className}>
+                {className.charAt(0).toUpperCase() + className.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {currentClass && (
+        <>
+          <div className="class-description" style={{
+            padding: '1rem',
+            margin: '1rem 0',
+            background: 'rgba(74, 158, 255, 0.1)',
+            borderRadius: '8px',
+            border: '1px solid rgba(74, 158, 255, 0.3)'
+          }}>
+            <h2>{currentClass.name}</h2>
+            <p>{currentClass.description}</p>
+            <p style={{ fontSize: '0.9rem', color: '#888', marginTop: '0.5rem' }}>
+              <strong>Source:</strong> {currentClass.source}
+            </p>
+          </div>
+
+          <div className="cards-container">
+            {currentClass.features.map((feature: ClassFeature, index: number) => (
+              <Card
+                key={index}
+                title={feature.name}
+                subtitle={`Level ${feature.level} Feature`}
+                type="Class Feature"
+                cost="-"
+                range="-"
+                description={feature.description}
+                enhancements={feature.options?.map(opt => `**${opt.name}**: ${opt.description}`)}
+                tags={[`Level ${feature.level}`]}
+                source={currentClass.source}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
