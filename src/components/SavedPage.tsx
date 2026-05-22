@@ -4,6 +4,8 @@ import { spells } from '../data/spells';
 import { maneuvers } from '../data/maneuvers';
 import { classes } from '../data/classes';
 import type { ClassFeature } from '../data/classes';
+import { ancestries } from '../data/ancestries';
+import type { AncestryTrait } from '../data/ancestries';
 import { useSavedItems } from '../hooks/useSavedItems';
 
 export const SavedPage: React.FC = () => {
@@ -31,13 +33,44 @@ export const SavedPage: React.FC = () => {
     });
   });
 
-  const totalSaved = savedSpells.length + savedManeuvers.length + savedClasses.length + savedFeatures.length;
+  const savedAncestries: Array<{ name: string; ancestryKey: string }> = [];
+  const savedAncestryTraits: Array<{ trait: AncestryTrait; ancestryKey: string; ancestryDisplayName: string; traitType: 'Default' | 'Expanded' }> = [];
+
+  Object.entries(ancestries).forEach(([ancestryKey, ancestryData]) => {
+    if (savedItems.has(`Ancestry:${ancestryData.name}`)) {
+      savedAncestries.push({ name: ancestryData.name, ancestryKey });
+    }
+
+    ancestryData.defaultTraits.forEach(trait => {
+      if (savedItems.has(`AncestryTrait:${ancestryData.name}:${trait.name}`)) {
+        savedAncestryTraits.push({
+          trait,
+          ancestryKey,
+          ancestryDisplayName: ancestryData.name,
+          traitType: 'Default'
+        });
+      }
+    });
+
+    ancestryData.expandedTraits.forEach(trait => {
+      if (savedItems.has(`AncestryTrait:${ancestryData.name}:${trait.name}`)) {
+        savedAncestryTraits.push({
+          trait,
+          ancestryKey,
+          ancestryDisplayName: ancestryData.name,
+          traitType: 'Expanded'
+        });
+      }
+    });
+  });
+
+  const totalSaved = savedSpells.length + savedManeuvers.length + savedClasses.length + savedFeatures.length + savedAncestries.length + savedAncestryTraits.length;
 
   return (
     <div className="app">
       <header className="app-header">
         <h1>Saved Items</h1>
-        <p className="subtitle">Your collection of saved spells, maneuvers, classes, and features</p>
+        <p className="subtitle">Your collection of saved spells, maneuvers, classes, features, ancestries, and traits</p>
       </header>
 
       <div className="results-info">
@@ -47,7 +80,7 @@ export const SavedPage: React.FC = () => {
       {totalSaved === 0 ? (
         <div className="no-results">
           <p>No saved items yet</p>
-          <p className="hint">Start saving spells, maneuvers, classes, or features from the other pages</p>
+          <p className="hint">Start saving spells, maneuvers, classes, features, ancestries, or traits from the other pages</p>
         </div>
       ) : (
         <>
@@ -144,6 +177,56 @@ export const SavedPage: React.FC = () => {
                     source={classes[item.className as keyof typeof classes].source}
                     isSaved={true}
                     onToggleSave={() => toggleSave(`${item.classDisplayName}:${item.feature.name}`, 'Feature')}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {savedAncestries.length > 0 && (
+            <>
+              <h2 style={{ padding: '1rem', color: '#4a9eff' }}>Ancestries ({savedAncestries.length})</h2>
+              <div className="cards-container">
+                {savedAncestries.map((savedAncestry) => {
+                  const ancestryData = ancestries[savedAncestry.ancestryKey as keyof typeof ancestries];
+                  return (
+                    <Card
+                      key={`ancestry-${savedAncestry.ancestryKey}`}
+                      title={ancestryData.name}
+                      subtitle="Ancestry"
+                      type="Character Ancestry"
+                      cost="-"
+                      range="-"
+                      description={ancestryData.description || `${ancestryData.defaultTraits.length} default traits and ${ancestryData.expandedTraits.length} expanded traits.`}
+                      enhancements={ancestryData.defaultTraits.slice(0, 3).map(t => `**${t.name}** (${t.pointCost}): ${t.description.substring(0, 80)}...`)}
+                      tags={[`${ancestryData.defaultTraits.length} Default Traits`, `${ancestryData.expandedTraits.length} Expanded Traits`]}
+                      source={ancestryData.source}
+                      isSaved={true}
+                      onToggleSave={() => toggleSave(ancestryData.name, 'Ancestry')}
+                    />
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {savedAncestryTraits.length > 0 && (
+            <>
+              <h2 style={{ padding: '1rem', color: '#4a9eff' }}>Ancestry Traits ({savedAncestryTraits.length})</h2>
+              <div className="cards-container">
+                {savedAncestryTraits.map((item, index) => (
+                  <Card
+                    key={`ancestry-trait-${index}`}
+                    title={item.trait.name}
+                    subtitle={`${item.ancestryDisplayName} ${item.traitType} Trait`}
+                    type="Ancestry Trait"
+                    cost={item.trait.pointCost.toString()}
+                    range="-"
+                    description={item.trait.description}
+                    tags={[`${item.traitType} Trait`, `${item.trait.pointCost} Points`, item.ancestryDisplayName]}
+                    source={ancestries[item.ancestryKey as keyof typeof ancestries].source}
+                    isSaved={true}
+                    onToggleSave={() => toggleSave(`${item.ancestryDisplayName}:${item.trait.name}`, 'AncestryTrait')}
                   />
                 ))}
               </div>
