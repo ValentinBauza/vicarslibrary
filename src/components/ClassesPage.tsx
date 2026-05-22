@@ -15,20 +15,17 @@ export const ClassesPage: React.FC = () => {
         <p className="subtitle">Reference for character classes and their features</p>
       </header>
 
-      <div className="filters">
-        <div className="filter-group">
-          <label htmlFor="class-select">Class:</label>
-          <select
-            id="class-select"
-            value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
-          >
-            {classNames.map((className) => (
-              <option key={className} value={className}>
-                {className.charAt(0).toUpperCase() + className.slice(1)}
-              </option>
-            ))}
-          </select>
+      <div className="controls">
+        <div className="filter-buttons">
+          {classNames.map((className) => (
+            <button
+              key={className}
+              className={`filter-btn ${selectedClass === className ? 'active' : ''}`}
+              onClick={() => setSelectedClass(className)}
+            >
+              {className.charAt(0).toUpperCase() + className.slice(1)}
+            </button>
+          ))}
         </div>
       </div>
 
