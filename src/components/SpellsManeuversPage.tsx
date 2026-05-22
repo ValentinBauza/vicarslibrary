@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Card } from './Card';
 import { maneuvers } from '../data/maneuvers';
 import { spells } from '../data/spells';
+import { useSavedItems } from '../hooks/useSavedItems';
 
-type ContentType = 'all' | 'spells' | 'maneuvers' | 'saved';
+type ContentType = 'all' | 'spells' | 'maneuvers';
 
 export const SpellsManeuversPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,35 +14,7 @@ export const SpellsManeuversPage: React.FC = () => {
   const [selectedManeuverType, setSelectedManeuverType] = useState<string>('all');
   const [selectedTag, setSelectedTag] = useState<string>('all');
 
-  // Load saved items from localStorage
-  const [savedItems, setSavedItems] = useState<Set<string>>(() => {
-    const saved = localStorage.getItem('dc20-saved-items');
-    return saved ? new Set(JSON.parse(saved)) : new Set();
-  });
-
-  // Save to localStorage whenever savedItems changes
-  useEffect(() => {
-    localStorage.setItem('dc20-saved-items', JSON.stringify(Array.from(savedItems)));
-  }, [savedItems]);
-
-  // Toggle save status for an item
-  const toggleSave = (itemName: string, category: string) => {
-    const key = `${category}:${itemName}`;
-    setSavedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(key)) {
-        newSet.delete(key);
-      } else {
-        newSet.add(key);
-      }
-      return newSet;
-    });
-  };
-
-  // Check if an item is saved
-  const isSaved = (itemName: string, category: string) => {
-    return savedItems.has(`${category}:${itemName}`);
-  };
+  const { toggleSave, isSaved } = useSavedItems();
 
   // Extract unique spell schools
   const spellSchools = useMemo(() => {
@@ -83,49 +56,38 @@ export const SpellsManeuversPage: React.FC = () => {
     type ItemWithCategory = (typeof spells[0] | typeof maneuvers[0]) & { category: string };
     let items: ItemWithCategory[] = [];
 
-    if (contentType === 'saved') {
-      // Show only saved items
-      const savedManeuvers = maneuvers
-        .filter(m => savedItems.has(`Maneuver:${m.name}`))
-        .map(m => ({ ...m, category: 'Maneuver' as const }));
-      const savedSpells = spells
-        .filter(s => savedItems.has(`Spell:${s.name}`))
-        .map(s => ({ ...s, category: 'Spell' as const }));
-      items = [...savedManeuvers, ...savedSpells];
-    } else {
-      if (contentType === 'all' || contentType === 'maneuvers') {
-        let maneuverItems = maneuvers.map(m => ({ ...m, category: 'Maneuver' as const }));
+    if (contentType === 'all' || contentType === 'maneuvers') {
+      let maneuverItems = maneuvers.map(m => ({ ...m, category: 'Maneuver' as const }));
 
-        // Filter by maneuver type
-        if (selectedManeuverType !== 'all') {
-          maneuverItems = maneuverItems.filter(m => m.type === selectedManeuverType);
-        }
-
-        items = [...items, ...maneuverItems];
+      // Filter by maneuver type
+      if (selectedManeuverType !== 'all') {
+        maneuverItems = maneuverItems.filter(m => m.type === selectedManeuverType);
       }
 
-      if (contentType === 'all' || contentType === 'spells') {
-        let spellItems = spells.map(s => ({ ...s, category: 'Spell' as const }));
+      items = [...items, ...maneuverItems];
+    }
 
-        // Filter by school
-        if (selectedSchool !== 'all') {
-          spellItems = spellItems.filter(s => s.school === selectedSchool);
-        }
+    if (contentType === 'all' || contentType === 'spells') {
+      let spellItems = spells.map(s => ({ ...s, category: 'Spell' as const }));
 
-        // Filter by source
-        if (selectedSource !== 'all') {
-          spellItems = spellItems.filter(s =>
-            s.source.split(',').map(src => src.trim()).includes(selectedSource)
-          );
-        }
-
-        // Filter by tag
-        if (selectedTag !== 'all') {
-          spellItems = spellItems.filter(s => s.tags.includes(selectedTag));
-        }
-
-        items = [...items, ...spellItems];
+      // Filter by school
+      if (selectedSchool !== 'all') {
+        spellItems = spellItems.filter(s => s.school === selectedSchool);
       }
+
+      // Filter by source
+      if (selectedSource !== 'all') {
+        spellItems = spellItems.filter(s =>
+          s.source.split(',').map(src => src.trim()).includes(selectedSource)
+        );
+      }
+
+      // Filter by tag
+      if (selectedTag !== 'all') {
+        spellItems = spellItems.filter(s => s.tags.includes(selectedTag));
+      }
+
+      items = [...items, ...spellItems];
     }
 
     if (!searchTerm) return items;
@@ -143,7 +105,7 @@ export const SpellsManeuversPage: React.FC = () => {
 
       return searchableText.includes(searchLower);
     });
-  }, [searchTerm, contentType, selectedSchool, selectedSource, selectedManeuverType, selectedTag, savedItems]);
+  }, [searchTerm, contentType, selectedSchool, selectedSource, selectedManeuverType, selectedTag]);
 
   return (
     <div className="app">
@@ -204,18 +166,6 @@ export const SpellsManeuversPage: React.FC = () => {
             }}
           >
             Maneuvers ({maneuvers.length})
-          </button>
-          <button
-            className={`filter-btn ${contentType === 'saved' ? 'active' : ''}`}
-            onClick={() => {
-              setContentType('saved');
-              setSelectedSchool('all');
-              setSelectedSource('all');
-              setSelectedManeuverType('all');
-              setSelectedTag('all');
-            }}
-          >
-            Saved ({savedItems.size})
           </button>
         </div>
 
