@@ -6,6 +6,7 @@ import { classes } from '../data/classes';
 import type { ClassFeature } from '../data/classes';
 import { ancestries } from '../data/ancestries';
 import type { AncestryTrait } from '../data/ancestries';
+import { allTalents } from '../data/talents';
 import { useSavedItems } from '../hooks/useSavedItems';
 
 export const SavedPage: React.FC = () => {
@@ -13,6 +14,7 @@ export const SavedPage: React.FC = () => {
 
   const savedSpells = spells.filter(s => savedItems.has(`Spell:${s.name}`));
   const savedManeuvers = maneuvers.filter(m => savedItems.has(`Maneuver:${m.name}`));
+  const savedTalents = allTalents.filter(t => savedItems.has(`Talent:${t.name}`));
 
   const savedClasses: Array<{ name: string; className: string }> = [];
   const savedFeatures: Array<{ feature: ClassFeature; className: string; classDisplayName: string }> = [];
@@ -64,13 +66,13 @@ export const SavedPage: React.FC = () => {
     });
   });
 
-  const totalSaved = savedSpells.length + savedManeuvers.length + savedClasses.length + savedFeatures.length + savedAncestries.length + savedAncestryTraits.length;
+  const totalSaved = savedSpells.length + savedManeuvers.length + savedClasses.length + savedFeatures.length + savedAncestries.length + savedAncestryTraits.length + savedTalents.length;
 
   return (
     <div className="app">
       <header className="app-header">
         <h1>Saved Items</h1>
-        <p className="subtitle">Your collection of saved spells, maneuvers, classes, features, ancestries, and traits</p>
+        <p className="subtitle">Your collection of saved spells, maneuvers, classes, features, ancestries, traits, and talents</p>
       </header>
 
       <div className="results-info">
@@ -80,7 +82,7 @@ export const SavedPage: React.FC = () => {
       {totalSaved === 0 ? (
         <div className="no-results">
           <p>No saved items yet</p>
-          <p className="hint">Start saving spells, maneuvers, classes, features, ancestries, or traits from the other pages</p>
+          <p className="hint">Start saving spells, maneuvers, classes, features, ancestries, traits, or talents from the other pages</p>
         </div>
       ) : (
         <>
@@ -227,6 +229,30 @@ export const SavedPage: React.FC = () => {
                     source={ancestries[item.ancestryKey as keyof typeof ancestries].source}
                     isSaved={true}
                     onToggleSave={() => toggleSave(`${item.ancestryDisplayName}:${item.trait.name}`, 'AncestryTrait')}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {savedTalents.length > 0 && (
+            <>
+              <h2 style={{ padding: '1rem', color: '#4a9eff' }}>Talents ({savedTalents.length})</h2>
+              <div className="cards-container">
+                {savedTalents.map((talent, index) => (
+                  <Card
+                    key={`talent-${index}`}
+                    title={talent.name}
+                    subtitle={talent.className ? `${talent.className} Talent` : 'General Talent'}
+                    type={talent.category === 'General' ? 'General Talent' : 'Class Talent'}
+                    cost="-"
+                    range="-"
+                    description={talent.description}
+                    enhancements={talent.benefits && talent.benefits.length > 0 ? talent.benefits : undefined}
+                    tags={[talent.category, talent.className, talent.requirement].filter(Boolean) as string[]}
+                    source="DC20 RPG Beta 0.10.5 (pg 186-190)"
+                    isSaved={true}
+                    onToggleSave={() => toggleSave(talent.name, 'Talent')}
                   />
                 ))}
               </div>

@@ -21,16 +21,24 @@ A searchable compendium of spells and maneuvers from DC20 RPG Beta v0.10.5.
   - Defense Maneuvers (5)
   - Grapple Maneuvers (4)
   - Utility Maneuvers (6)
-- 🏷️ **Advanced Filtering** - Filter by school, source, type, and tags
-- 💾 **Save Favorites** - Save spells and maneuvers to your browser for quick access
+- 👥 **14 Classes** - Complete class database with level-based features
+- 🧬 **10 Ancestries** - All ancestries with default and expanded traits
+- ✨ **42 Talents** - General and class-specific talents for character progression:
+  - 5 General Talents
+  - 37 Class Talents
+- 🏷️ **Advanced Filtering** - Filter by school, source, type, tags, class, and category
+- 💾 **Save Favorites** - Save spells, maneuvers, classes, features, ancestries, traits, and talents to your browser for quick access
 - 🔒 **Password Protected** - Simple access control
 - 🎨 **Dark Theme** - Easy on the eyes for long reading sessions
 
 ## Data Source
 
-All spell and maneuver data is extracted from the **DC20 RPG 0.10.5 Beta v1** PDF:
+All data is extracted from the **DC20 RPG 0.10.5 Beta v1** PDF:
 - Spells: Pages 70-144
 - Maneuvers: Pages 51-58
+- Classes: Various pages
+- Ancestries: Various pages
+- Talents: Pages 186-190
 
 ## Tech Stack
 

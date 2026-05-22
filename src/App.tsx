@@ -4,9 +4,10 @@ import { PasswordGate } from './components/PasswordGate';
 import { SpellsManeuversPage } from './components/SpellsManeuversPage';
 import { ClassesPage } from './components/ClassesPage';
 import { AncestriesPage } from './components/AncestriesPage';
+import { TalentsPage } from './components/TalentsPage';
 import { SavedPage } from './components/SavedPage';
 
-type PageType = 'spells-maneuvers' | 'classes' | 'ancestries' | 'saved';
+type PageType = 'spells-maneuvers' | 'classes' | 'ancestries' | 'talents' | 'saved';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -41,6 +42,12 @@ function App() {
           Ancestries
         </button>
         <button
+          className={`nav-btn ${currentPage === 'talents' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('talents')}
+        >
+          Talents
+        </button>
+        <button
           className={`nav-btn ${currentPage === 'saved' ? 'active' : ''}`}
           onClick={() => setCurrentPage('saved')}
         >
@@ -51,6 +58,7 @@ function App() {
       {currentPage === 'spells-maneuvers' && <SpellsManeuversPage />}
       {currentPage === 'classes' && <ClassesPage />}
       {currentPage === 'ancestries' && <AncestriesPage />}
+      {currentPage === 'talents' && <TalentsPage />}
       {currentPage === 'saved' && <SavedPage />}
     </div>
   );
